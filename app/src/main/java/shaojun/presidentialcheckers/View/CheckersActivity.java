@@ -1,7 +1,9 @@
-package shaojun.presidentialcheckers;
+package shaojun.presidentialcheckers.View;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import shaojun.presidentialcheckers.R;
 
 public class CheckersActivity extends AppCompatActivity
 {
@@ -11,5 +13,4 @@ public class CheckersActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkers);
     }
-
 }

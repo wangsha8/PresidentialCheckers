@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="shaojun.presidentialcheckers.CheckersActivity">
+    tools:context="shaojun.presidentialcheckers.View.CheckersActivity">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -26,20 +26,20 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/hillaryneutral"
                 android:id="@+id/imageView4"
+                android:adjustViewBounds="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:adjustViewBounds="true"/>
+                android:layout_alignParentStart="true" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
-            <shaojun.presidentialcheckers.View.CheckersPlayView
+            <shaojun.presidentialcheckers.Controller.CheckersPlayController
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-            </shaojun.presidentialcheckers.View.CheckersPlayView>
+            </shaojun.presidentialcheckers.Controller.CheckersPlayController>
         </RelativeLayout>
 
         <RelativeLayout
@@ -53,9 +53,11 @@
                 app:srcCompat="@drawable/trumpneutral"
                 android:id="@+id/imageView3"
                 android:adjustViewBounds="true"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
 
     </LinearLayout>

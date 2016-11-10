@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".StartActivity"
+            android:name=".View.StartActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,8 +18,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CheckersActivity"
-            android:screenOrientation="landscape"></activity>
+            android:name=".View.PopupActivity"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity
+            android:name=".View.CheckersActivity"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>

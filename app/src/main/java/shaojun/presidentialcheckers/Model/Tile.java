@@ -21,6 +21,7 @@ public final class Tile {
     private Rect tileRect;
 
     public Piece piece;
+    public boolean isNotBlocked;
 
     public Tile(final int col, final int row) {
         this.col = col;
@@ -28,25 +29,26 @@ public final class Tile {
 
         this.squareColor = new Paint();
         squareColor.setColor(isDark() ? Color.BLACK : Color.WHITE);
+        isNotBlocked = isDark() ? false : true;
     }
 
     public void draw(final Canvas canvas) {
         canvas.drawRect(tileRect, squareColor);
     }
 
-    public String getColumnString() {
-        switch (col) {
-            case 0: return "A";
-            case 1: return "B";
-            case 2: return "C";
-            case 3: return "D";
-            case 4: return "E";
-            case 5: return "F";
-            case 6: return "G";
-            case 7: return "H";
-            default: return null;
-        }
-    }
+//    public String getColumnString() {
+//        switch (col) {
+//            case 0: return "A";
+//            case 1: return "B";
+//            case 2: return "C";
+//            case 3: return "D";
+//            case 4: return "E";
+//            case 5: return "F";
+//            case 6: return "G";
+//            case 7: return "H";
+//            default: return null;
+//        }
+//    }
 
     public String getRowString() {
         // To get the actual row, add 1 since 'row' is 0 indexed.
@@ -70,10 +72,10 @@ public final class Tile {
         this.tileRect = tileRect;
     }
 
-    public String toString() {
-        final String column = getColumnString();
-        final String row    = getRowString();
-        return "<Tile " + column + row + ">";
-    }
+//    public String toString() {
+//        final String column = getColumnString();
+//        final String row    = getRowString();
+//        return "<Tile " + column + row + ">";
+//    }
 
 }

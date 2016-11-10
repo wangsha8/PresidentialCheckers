@@ -1,4 +1,4 @@
-package shaojun.presidentialcheckers.View;
+package shaojun.presidentialcheckers.Controller;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -16,9 +16,9 @@ import shaojun.presidentialcheckers.Model.Piece;
  * Created by shaojun on 11/4/16.
  */
 
-public class CheckersPlayView extends View
+public class CheckersPlayController extends View
 {
-    private static final String TAG = CheckersPlayView.class.getSimpleName();
+    private static final String TAG = CheckersPlayController.class.getSimpleName();
 
     private static final int DIMENSION=8;
 
@@ -33,7 +33,7 @@ public class CheckersPlayView extends View
     /** 'true' if black is facing player. */
     private boolean flipped = false;
 
-    public CheckersPlayView(Context context, AttributeSet attrs)
+    public CheckersPlayController(Context context, AttributeSet attrs)
     {
         super(context,attrs);
 
@@ -122,16 +122,7 @@ public class CheckersPlayView extends View
     public boolean onTouchEvent(final MotionEvent event) {
         final int x = (int) event.getX();
         final int y = (int) event.getY();
-        boolean oneSelected= false;
-        Piece selectedPiece=null;
-        for (Piece p:pieces)
-        {
-            if (p.selected==true)
-            {
-                oneSelected=true;
-                selectedPiece=p;
-            }
-        }
+
         Tile tile;
         outerloop:
         for (int r = 0; r < DIMENSION; r++) {
@@ -140,25 +131,7 @@ public class CheckersPlayView extends View
                 if (tile.isTouched(x, y))
                 {
                     tile.handleTouch();
-                    if(oneSelected && tile.piece==null)
-                    {
-                        selectedPiece.tile.piece=null;
-                        tile.piece=selectedPiece;
-                        selectedPiece.tile=tile;
-                        for (Piece p:pieces)
-                        {p.selected=false;}
-                        invalidate();
-                        break outerloop;
-                    }
-                    else
-                    {
-                        tile.piece.selected=true;
-                        for (Piece p:pieces)
-                        {
-                            if(p.id!=tile.piece.id)
-                            {p.selected=false;}
-                        }
-                    }
+
                 }
             }
         }

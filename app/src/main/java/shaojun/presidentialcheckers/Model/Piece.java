@@ -9,9 +9,10 @@ import android.graphics.Paint;
 
 public class Piece
 {
+    public static Piece selectedPiece = null;
+
     public int id;
     public Tile tile;
-    public boolean selected = false;
     private Paint circleColor;
     private int radius;
     public int centerX;
