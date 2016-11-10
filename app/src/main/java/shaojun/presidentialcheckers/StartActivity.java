@@ -25,7 +25,7 @@ public class StartActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
-    public void setupCheckers(View view)
+    public void transitToCheckersActivity(View view)
     {
         Intent intent = new Intent(this,CheckersActivity.class);
         startActivity(intent);
