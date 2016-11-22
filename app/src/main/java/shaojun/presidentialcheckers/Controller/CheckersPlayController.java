@@ -7,11 +7,11 @@ import android.view.View;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.MotionEvent;
+import shaojun.presidentialcheckers.Model.*;
 
-import java.util.LinkedList;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import shaojun.presidentialcheckers.Model.Tile;
-import shaojun.presidentialcheckers.Model.Piece;
 /**
  * Created by shaojun on 11/4/16.
  */
@@ -19,27 +19,35 @@ import shaojun.presidentialcheckers.Model.Piece;
 public class CheckersPlayController extends View
 {
     private static final String TAG = CheckersPlayController.class.getSimpleName();
+    public TextView hillaryscore;
+    public TextView trumpscore;
+    public ImageView hillaryhead;
+    public ImageView trumphead;
+    public Entity player=null;
+    public Entity opponent=null;
 
-    private static final int DIMENSION=8;
+    private static final int DIMENSION=6;
 
     private final Tile[][] mTiles;
 
-    private LinkedList<Piece> pieces=new LinkedList<>();
 
     private int x0 = 0;
     private int y0 = 0;
     private int squareSize = 0;
-
-    /** 'true' if black is facing player. */
-    private boolean flipped = false;
+    private boolean robot=RulesEngine.robot;
+    private boolean trump=RulesEngine.trump;
 
     public CheckersPlayController(Context context, AttributeSet attrs)
     {
         super(context,attrs);
-
+        this.player=new Player();
+        this.opponent=new Opponent();
+        RulesEngine.player=this.player;
+        RulesEngine.opponent=this.opponent;
         this.mTiles = new Tile[DIMENSION][DIMENSION];
         setFocusable(true);
         buildTiles();
+        RulesEngine.tiles=mTiles;
     }
 
     @Override
@@ -51,20 +59,22 @@ public class CheckersPlayController extends View
         int count = 0;
         for (int r = 0; r < DIMENSION; r++) {
             for (int c = 0; c < DIMENSION; c++) {
-                mTiles[c][r] = new Tile(c, r);
+                mTiles[r][c] = new Tile(r, c);
                 if ((c+r)%2==1)
                 {
                     if (count<(DIMENSION*2+1))
                     {
-                        Piece piece = new Piece(mTiles[c][r], Color.RED,count);
-                        this.pieces.add(piece);
-                        mTiles[c][r].piece = piece;
+                        Piece piece = new Piece(mTiles[r][c], getOpponentColor(),count);
+                        piece.owner=opponent;
+                        opponent.pieces.add(piece);
+                        mTiles[r][c].piece = piece;
                     }
                     if (count>DIMENSION*DIMENSION-DIMENSION*2-1)
                     {
-                        Piece piece = new Piece(mTiles[c][r], Color.BLUE,count);
-                        this.pieces.add(piece);
-                        mTiles[c][r].piece = piece;
+                        Piece piece = new Piece(mTiles[r][c], getPlayerColor(),count);
+                        piece.owner=player;
+                        player.pieces.add(piece);
+                        mTiles[r][c].piece = piece;
                     }
                 }
                 count++;
@@ -72,18 +82,41 @@ public class CheckersPlayController extends View
         }
     }
 
+    private int getPlayerColor()
+    {
+        if(this.trump)
+        {
+            return Color.RED;
+        }
+        else
+        {
+            return Color.BLUE;
+        }
+    }
+
+    private int getOpponentColor()
+    {
+        if(!(this.trump))
+        {
+            return Color.RED;
+        }
+        else
+        {
+            return Color.BLUE;
+        }
+    }
 
     private int getXCoord(final int x) {
-        return x0 + squareSize * (flipped ? 7 - x : x);
+        return x0 + squareSize * x;
     }
 
     private int getYCoord(final int y) {
-        return y0 + squareSize * (flipped ? y : 7 - y);
+        return y0 + squareSize * y;
     }
 
     private void computeOrigins(final int width, final int height) {
-        this.x0 = (width  - squareSize * 8) / 2;
-        this.y0 = (height - squareSize * 8) / 2;
+        this.x0 = (width  - squareSize * DIMENSION) / 2;
+        this.y0 = (height - squareSize * DIMENSION) / 2;
     }
 
     @Override
@@ -106,20 +139,21 @@ public class CheckersPlayController extends View
                         yCoord + squareSize   // bottom
                 );
 
-                mTiles[c][r].setTileRect(tileRect);
-                mTiles[c][r].draw(canvas);
+                mTiles[r][c].setTileRect(tileRect);
+                mTiles[r][c].draw(canvas);
 
-                if(mTiles[c][r].piece != null)
+                if(mTiles[r][c].piece != null)
                 {
-                    mTiles[c][r].piece.setDrawingParam(squareSize/2,xCoord+squareSize/2,yCoord+squareSize/2);
-                    mTiles[c][r].piece.draw(canvas);
+                    mTiles[r][c].piece.setDrawingParam(squareSize/2,xCoord+squareSize/2,yCoord+squareSize/2);
+                    mTiles[r][c].piece.draw(canvas);
                 }
+                Piece.drawSelected(canvas);
             }
         }
     }
 
-    @Override
-    public boolean onTouchEvent(final MotionEvent event) {
+    public void handleTouch(final MotionEvent event)
+    {
         final int x = (int) event.getX();
         final int y = (int) event.getY();
 
@@ -127,17 +161,64 @@ public class CheckersPlayController extends View
         outerloop:
         for (int r = 0; r < DIMENSION; r++) {
             for (int c = 0; c < DIMENSION; c++) {
-                tile = mTiles[c][r];
+                tile = mTiles[r][c];
                 if (tile.isTouched(x, y))
                 {
                     tile.handleTouch();
-
+                    if(RulesEngine.pieceSelectable(tile.piece))
+                    {
+                        RulesEngine.selectPiece(tile.piece);
+                        RulesEngine.setLegality();
+                    }
+                    else if(RulesEngine.pieceDeployable(tile))
+                    {
+                        RulesEngine.switchTile(tile,hillaryscore,trumpscore,hillaryhead,trumphead);
+                        RulesEngine.switchTurn();
+                        RulesEngine.clearLegality();
+                    }
+                    invalidate();
+                    break outerloop;
                 }
             }
         }
-
-        return true;
+        if(opponent.turn && RulesEngine.winner==null && !opponent.pieces.isEmpty() && RulesEngine.robot)
+        {
+            DecisionEngine.moveAPiece(hillaryscore,trumpscore,hillaryhead,trumphead);
+            invalidate();
+        }
     }
+//    @Override
+//    public boolean onTouchEvent(final MotionEvent event) {
+//        final int x = (int) event.getX();
+//        final int y = (int) event.getY();
+//
+//        Tile tile;
+//        outerloop:
+//        for (int r = 0; r < DIMENSION; r++) {
+//            for (int c = 0; c < DIMENSION; c++) {
+//                tile = mTiles[r][c];
+//                if (tile.isTouched(x, y))
+//                {
+//                    tile.handleTouch();
+//                    if(RulesEngine.pieceSelectable(tile.piece))
+//                    {
+//                        RulesEngine.selectPiece(tile.piece);
+//                        RulesEngine.setLegality();
+//                    }
+//                    else if(RulesEngine.pieceDeployable(tile))
+//                    {
+//                        RulesEngine.switchTile(tile,hillaryscore,trumpscore);
+//                        RulesEngine.switchTurn();
+//                        RulesEngine.clearLegality();
+//                    }
+//                    invalidate();
+//                    break outerloop;
+//                }
+//            }
+//        }
+//
+//        return true;
+//    }
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
@@ -151,4 +232,5 @@ public class CheckersPlayController extends View
             super.onMeasure(heightMeasureSpec, heightMeasureSpec);
         }
     }
+
 }

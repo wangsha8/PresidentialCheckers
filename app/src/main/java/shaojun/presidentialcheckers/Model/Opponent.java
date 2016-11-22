@@ -6,5 +6,9 @@ package shaojun.presidentialcheckers.Model;
 
 public class Opponent extends Entity
 {
-
+    public Opponent()
+    {
+        super();
+        this.turn=false;
+    }
 }

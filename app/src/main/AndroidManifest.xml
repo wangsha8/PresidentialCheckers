@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="shaojun.presidentialcheckers">
 
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,12 +21,13 @@
         </activity>
         <activity
             android:name=".View.PopupActivity"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".View.CheckersActivity"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".View.AnnounceActivity"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

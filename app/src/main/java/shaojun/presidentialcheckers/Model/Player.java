@@ -6,5 +6,9 @@ package shaojun.presidentialcheckers.Model;
 
 public class Player extends Entity
 {
-
+    public Player()
+    {
+        super();
+        this.turn=true;
+    }
 }

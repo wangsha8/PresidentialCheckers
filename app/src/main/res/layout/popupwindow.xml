@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="shaojun.presidentialcheckers.View.PopupActivity">
+    tools:context="shaojun.presidentialcheckers.View.PopupActivity"
+    android:background="@drawable/trumpvshillary">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -25,50 +26,103 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">>
+            android:layout_weight="0.5"><![CDATA[>
 
-            <Button
-                android:text="Hillary Clinton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/button"
-                android:layout_alignLeft="@+id/button"
-                android:layout_alignStart="@+id/button"
-                android:layout_marginTop="36dp"
-                android:id="@+id/button2"
-                android:textStyle="normal|bold"
-                android:layout_alignRight="@+id/button"
-                android:layout_alignEnd="@+id/button"
-                android:onClick="hillarySelected" />
 
-            <Button
-                android:text="Donald Trump"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textView2"
-                android:layout_marginTop="34dp"
-                android:id="@+id/button"
-                android:textStyle="normal|bold"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:onClick="trumpSelected" />
 
-            <TextView
-                android:text="Which side do you choose?"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="77dp"
-                android:id="@+id/textView2"
-                android:textStyle="normal|bold"
-                android:textSize="18sp"
-                android:textAlignment="center"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+
+
+
+
+
+
+
+
+            ]]>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.3">
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:text="Which side do you choose?"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView2"
+                        android:textStyle="normal|bold"
+                        android:textSize="18sp"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/background_light"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2">
+
+                    <Button
+                        android:text="Donald Trump"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button"
+                        android:textStyle="normal|bold"
+                        android:onClick="trumpSelected"
+                        android:backgroundTint="@color/red"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@android:color/background_light"
+                        android:layout_alignParentBottom="true" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2">
+
+                    <Button
+                        android:text="Hillary Clinton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button2"
+                        android:textStyle="normal|bold"
+                        android:onClick="hillarySelected"
+                        android:backgroundTint="@color/blue"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="@android:color/background_light"
+                        android:layout_alignParentBottom="true" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.3">
+                </RelativeLayout>
+            </LinearLayout>
+
         </RelativeLayout>
 
         <RelativeLayout

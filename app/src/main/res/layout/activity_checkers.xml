@@ -21,15 +21,39 @@
             android:layout_height="match_parent"
             android:layout_weight="2">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/hillaryneutral"
-                android:id="@+id/imageView4"
-                android:adjustViewBounds="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/hillaryneutral"
+                        android:id="@+id/hillaryhead"
+                        android:layout_alignParentTop="true" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:text="0"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center|top"
+                        android:id="@+id/hillaryscore"
+                        android:textSize="24sp" />
+                </RelativeLayout>
+            </LinearLayout>
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -37,8 +61,14 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
             <shaojun.presidentialcheckers.Controller.CheckersPlayController
+                android:id="@+id/board"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
             </shaojun.presidentialcheckers.Controller.CheckersPlayController>
         </RelativeLayout>
 
@@ -47,17 +77,41 @@
             android:layout_height="match_parent"
             android:layout_weight="2">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/trumpneutral"
-                android:id="@+id/imageView3"
-                android:adjustViewBounds="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/trumpneutral"
+                        android:id="@+id/trumphead"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:text="0"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center|top"
+                        android:id="@+id/trumpscore"
+                        android:textSize="24sp" />
+                </RelativeLayout>
+            </LinearLayout>
+
         </RelativeLayout>
 
     </LinearLayout>

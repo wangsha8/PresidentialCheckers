@@ -1,11 +1,13 @@
 package shaojun.presidentialcheckers.View;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
-import shaojun.presidentialcheckers.Model.PlayOption;
+import shaojun.presidentialcheckers.Controller.RulesEngine;
 import shaojun.presidentialcheckers.R;
 
 /**
@@ -23,13 +25,19 @@ public class PopupActivity extends Activity
 
     public void trumpSelected(View view)
     {
-        PlayOption.trump=true;
+//        SharedPreferences sharedPref = this.getSharedPreferences("userpreference", Context.MODE_PRIVATE);
+//        sharedPref.edit().putBoolean("trump",true).commit();
+        RulesEngine.trump=true;
+        //PlayOption.trump=true;
         startActivity(new Intent(PopupActivity.this, CheckersActivity.class));
     }
 
     public void hillarySelected(View view)
     {
-        PlayOption.trump=false;
+//        SharedPreferences sharedPref = this.getSharedPreferences("userpreference", Context.MODE_PRIVATE);
+//        sharedPref.edit().putBoolean("trump",false).commit();
+        RulesEngine.trump=false;
+        //PlayOption.trump=false;
         startActivity(new Intent(PopupActivity.this, CheckersActivity.class));
     }
 }
