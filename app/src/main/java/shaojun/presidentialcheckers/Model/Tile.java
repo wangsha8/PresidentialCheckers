@@ -11,59 +11,41 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
-public final class Tile {
-    private static final String TAG = Tile.class.getSimpleName();
-
+public final class Tile
+{
+    //primative
     private final int columnNumber;
     private final int rowNumber;
-
-    private final Paint squareColor;
-    private Rect rect;
-
-    public Piece piece;
     public boolean legal=false;
     public boolean isNotBlocked;
+    //reference
+    private final Paint rectColor = new Paint();
+    public Rect rect;
+    public Piece piece;
 
-    public Tile(final int rowNumber, final int columnNumber) {
+    public Tile(int rowNumber, int columnNumber)
+    {
         this.columnNumber = columnNumber;
         this.rowNumber = rowNumber;
-
-        this.squareColor = new Paint();
-        squareColor.setColor(isBlack() ? Color.BLACK : Color.WHITE);
-        isNotBlocked = isBlack() ? false : true;
+        rectColor.setColor((columnNumber + rowNumber) % 2 == 0 ? Color.BLACK : Color.WHITE);
+        isNotBlocked = (columnNumber + rowNumber) % 2 == 0? false : true;
     }
 
-    public void draw(final Canvas canvas) {
+    public void draw(final Canvas canvas)
+    {
         if (this.legal)
-        {this.squareColor.setColor(Color.rgb(180,255,220));}
+        {this.rectColor.setColor(Color.rgb(180,255,220));}
         else
-        {squareColor.setColor(isBlack() ? Color.BLACK : Color.WHITE);}
-        canvas.drawRect(rect, squareColor);
+        {rectColor.setColor((columnNumber + rowNumber) % 2 == 0? Color.BLACK : Color.WHITE);}
+        canvas.drawRect(rect, rectColor);
     }
-
 
     public void handleTouch()
-    {
-        Log.d(TAG, " Tile touched: column Number: " + columnNumber +", row Number: " + rowNumber);
-    }
+    {Log.d("Tile touched"," column Number: " + columnNumber +", row Number: " + rowNumber);}
 
-    public boolean isBlack() {
-        return (columnNumber + rowNumber) % 2 == 0;
-    }
+    public int getColumnNumber()
+    {return columnNumber;}
 
-    public boolean isTouched(final int x, final int y)
-    {return rect.contains(x, y);}
-
-    public void setRect(final Rect rect)
-    {
-        this.rect = rect;
-    }
-
-    public int getColumnNumber() {
-        return columnNumber;
-    }
-
-    public int getRowNumber() {
-            return rowNumber;
-    }
+    public int getRowNumber()
+    {return rowNumber;}
 }

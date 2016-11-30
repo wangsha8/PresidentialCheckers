@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ public class CheckersActivity extends AppCompatActivity
 
     }
 
-    private MediaPlayer mPlayer;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,26 +66,31 @@ public class CheckersActivity extends AppCompatActivity
     {
         Random ran = new Random();
         int n = ran.nextInt(5);
-        stopPlaying();
-        mPlayer = MediaPlayer.create(CheckersActivity.this, hillaryAudio[n]);
-        mPlayer.start();
+        resetPlayer();
+        this.mediaPlayer = MediaPlayer.create(CheckersActivity.this, hillaryAudio[n]);
+        this.mediaPlayer.start();
     }
 
     public void playTrump()
     {
         Random ran = new Random();
         int n = ran.nextInt(5);
-        stopPlaying();
-        mPlayer = MediaPlayer.create(CheckersActivity.this, trumpAudio[n]);
-        mPlayer.start();
+        resetPlayer();
+        this.mediaPlayer = MediaPlayer.create(CheckersActivity.this, trumpAudio[n]);
+        this.mediaPlayer.start();
     }
 
-    private void stopPlaying() {
-        if (mPlayer != null)
+    private void resetPlayer() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying())
         {
-            mPlayer.stop();
-            mPlayer.release();
-            mPlayer = null;
+            try{
+                mediaPlayer.stop();
+                mediaPlayer.release();
+                mediaPlayer=null;}
+            catch(Exception e){
+                Log.d("mediaPlayer exception ",e.toString());
+            }
+
         }
     }
 }

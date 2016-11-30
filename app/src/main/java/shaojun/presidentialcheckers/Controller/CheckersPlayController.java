@@ -19,24 +19,23 @@ import android.widget.TextView;
 
 public class CheckersPlayController extends View
 {
-    private static final String TAG = CheckersPlayController.class.getSimpleName();
+    //primitive
+    private static final int DIMENSION=6;
+    private int xOrigin = 0;
+    private int yOrigin = 0;
+    private int squareSize = 0;
+
+    private boolean robot=RulesEngine.robot;
+    private boolean trump=RulesEngine.trump;
+
+    //reference
     public TextView hillaryscore;
     public TextView trumpscore;
     public ImageView hillaryhead;
     public ImageView trumphead;
     public Entity player=null;
     public Entity opponent=null;
-
-    private static final int DIMENSION=6;
-
     private final Tile[][] tiles;
-
-
-    private int xOrigin = 0;
-    private int yOrigin = 0;
-    private int squareSize = 0;
-    private boolean robot=RulesEngine.robot;
-    private boolean trump=RulesEngine.trump;
 
     public CheckersPlayController(Context context, AttributeSet attrs)
     {
@@ -107,40 +106,23 @@ public class CheckersPlayController extends View
         }
     }
 
-    private int getXFromColumnNumber(final int c)
-    {
-        return xOrigin + squareSize * c;
-    }
-
-    private int getYFromRowNumber(final int r)
-    {
-        return yOrigin + squareSize * r;
-    }
-
-    private void setOrigins(final int width, final int height) {
-        this.xOrigin = (width  - squareSize * DIMENSION) / 2;
-        this.yOrigin = (height - squareSize * DIMENSION) / 2;
-    }
-
     @Override
     protected void onDraw(final Canvas canvas) {
-        final int width = getWidth();
-        final int height = getHeight();
-        this.squareSize = Math.min(getWidth()/DIMENSION, getHeight()/DIMENSION);
-
-        setOrigins(width, height);
+        int w = getWidth();
+        int h = getHeight();
+        this.squareSize = w/DIMENSION < h/DIMENSION? w/DIMENSION: h/DIMENSION;
+        this.xOrigin = (w  - squareSize * DIMENSION) / 2;
+        this.yOrigin = (h - squareSize * DIMENSION) / 2;
 
         for (int r = 0; r < DIMENSION; r++) {
             for (int c = 0; c < DIMENSION; c++) {
-                final int xCoord = getXFromColumnNumber(c);
-                final int yCoord = getYFromRowNumber(r);
-                final Rect rect = new Rect(xCoord, yCoord, (xCoord + squareSize), (yCoord + squareSize));
-                tiles[r][c].setRect(rect);
+                int x = xOrigin + squareSize * c;
+                int y = yOrigin + squareSize * r;
+                tiles[r][c].rect=new Rect(x, y, (x + squareSize), (y + squareSize));
                 tiles[r][c].draw(canvas);
-
                 if(tiles[r][c].piece != null)
                 {
-                    tiles[r][c].piece.setDrawingParam(squareSize/2,xCoord+squareSize/2,yCoord+squareSize/2);
+                    tiles[r][c].piece.setDrawingParam(squareSize/2,x+squareSize/2,y+squareSize/2);
                     tiles[r][c].piece.draw(canvas);
                 }
                 Piece.drawSelected(canvas);
@@ -150,15 +132,14 @@ public class CheckersPlayController extends View
 
     public void handleTouch(final MotionEvent event)
     {
-        final int x = (int) event.getX();
-        final int y = (int) event.getY();
-
+        int x = (int) event.getX();
+        int y = (int) event.getY();
         Tile tile;
         outerloop:
         for (int r = 0; r < DIMENSION; r++) {
             for (int c = 0; c < DIMENSION; c++) {
                 tile = tiles[r][c];
-                if (tile.isTouched(x, y))
+                if (tile.rect.contains(x, y))
                 {
                     tile.handleTouch();
                     if(RulesEngine.pieceSelectable(tile.piece))
