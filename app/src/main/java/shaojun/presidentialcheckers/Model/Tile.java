@@ -14,60 +14,56 @@ import android.util.Log;
 public final class Tile {
     private static final String TAG = Tile.class.getSimpleName();
 
-    private final int col;
-    private final int row;
+    private final int columnNumber;
+    private final int rowNumber;
 
     private final Paint squareColor;
-    private Rect tileRect;
+    private Rect rect;
 
     public Piece piece;
     public boolean legal=false;
     public boolean isNotBlocked;
 
-    public Tile(final int row, final int col) {
-        this.col = col;
-        this.row = row;
+    public Tile(final int rowNumber, final int columnNumber) {
+        this.columnNumber = columnNumber;
+        this.rowNumber = rowNumber;
 
         this.squareColor = new Paint();
-        squareColor.setColor(isDark() ? Color.BLACK : Color.WHITE);
-        isNotBlocked = isDark() ? false : true;
+        squareColor.setColor(isBlack() ? Color.BLACK : Color.WHITE);
+        isNotBlocked = isBlack() ? false : true;
     }
 
     public void draw(final Canvas canvas) {
         if (this.legal)
         {this.squareColor.setColor(Color.rgb(180,255,220));}
         else
-        {squareColor.setColor(isDark() ? Color.BLACK : Color.WHITE);}
-        canvas.drawRect(tileRect, squareColor);
+        {squareColor.setColor(isBlack() ? Color.BLACK : Color.WHITE);}
+        canvas.drawRect(rect, squareColor);
     }
 
 
-    public String getRowString() {
-        // To get the actual row, add 1 since 'row' is 0 indexed.
-        return String.valueOf(row + 1);
+    public void handleTouch()
+    {
+        Log.d(TAG, " Tile touched: column Number: " + columnNumber +", row Number: " + rowNumber);
     }
 
-    public void handleTouch() {
-        Log.d(TAG, "handleTouch(): col: " + col +" row: " + row);
+    public boolean isBlack() {
+        return (columnNumber + rowNumber) % 2 == 0;
     }
 
-    public boolean isDark() {
-        return (col + row) % 2 == 0;
+    public boolean isTouched(final int x, final int y)
+    {return rect.contains(x, y);}
+
+    public void setRect(final Rect rect)
+    {
+        this.rect = rect;
     }
 
-    public boolean isTouched(final int x, final int y) {
-        return tileRect.contains(x, y);
+    public int getColumnNumber() {
+        return columnNumber;
     }
 
-    public void setTileRect(final Rect tileRect) {
-        this.tileRect = tileRect;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public int getRow() {
-            return row;
+    public int getRowNumber() {
+            return rowNumber;
     }
 }

@@ -3,21 +3,13 @@ package shaojun.presidentialcheckers.Controller;
 /**
  * Created by shaojun on 11/10/16.
  */
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.LinkedList;
-import java.util.Random;
-
 import shaojun.presidentialcheckers.Model.*;
 import shaojun.presidentialcheckers.R;
 import shaojun.presidentialcheckers.View.CheckersActivity;
-import shaojun.presidentialcheckers.View.PopupActivity;
 
 public class RulesEngine
 {
@@ -72,16 +64,16 @@ public class RulesEngine
 
     private static boolean getPlayerLegal(Piece piece, Tile tile)
     {
-        int r=(piece.tile.getRow()+tile.getRow())/2;
-        int c=(piece.tile.getCol()+tile.getCol())/2;
+        int r=(piece.tile.getRowNumber()+tile.getRowNumber())/2;
+        int c=(piece.tile.getColumnNumber()+tile.getColumnNumber())/2;
         if(piece!=null && !piece.leveledUp && tile.piece==null)
         {
-            if(piece.tile.getRow()-tile.getRow()==2 && Math.abs(piece.tile.getCol()-tile.getCol())==2
+            if(piece.tile.getRowNumber()-tile.getRowNumber()==2 && Math.abs(piece.tile.getColumnNumber()-tile.getColumnNumber())==2
                     && tiles[r][c].piece!=null && tiles[r][c].piece.owner.getClass()==Opponent.class)
             {
                 return true;
             }
-            else if (piece.tile.getRow()-tile.getRow()==1 && Math.abs(piece.tile.getCol()-tile.getCol())==1)
+            else if (piece.tile.getRowNumber()-tile.getRowNumber()==1 && Math.abs(piece.tile.getColumnNumber()-tile.getColumnNumber())==1)
             {
                 return true;
             }
@@ -92,12 +84,12 @@ public class RulesEngine
         }
         else if (piece!=null && piece.leveledUp && tile.piece==null)
         {
-            if(Math.abs(piece.tile.getRow()-tile.getRow())==2 && Math.abs(piece.tile.getCol()-tile.getCol())==2
+            if(Math.abs(piece.tile.getRowNumber()-tile.getRowNumber())==2 && Math.abs(piece.tile.getColumnNumber()-tile.getColumnNumber())==2
                     && tiles[r][c].piece!=null && tiles[r][c].piece.owner.getClass()==Opponent.class)
             {
                 return true;
             }
-            else if (Math.abs(piece.tile.getRow()-tile.getRow())==1 && Math.abs(piece.tile.getCol()-tile.getCol())==1)
+            else if (Math.abs(piece.tile.getRowNumber()-tile.getRowNumber())==1 && Math.abs(piece.tile.getColumnNumber()-tile.getColumnNumber())==1)
             {
                 return true;
             }
@@ -112,16 +104,16 @@ public class RulesEngine
 
     private static boolean getOpponentLegal(Piece piece, Tile tile)
     {
-        int r=(piece.tile.getRow()+tile.getRow())/2;
-        int c=(piece.tile.getCol()+tile.getCol())/2;
+        int r=(piece.tile.getRowNumber()+tile.getRowNumber())/2;
+        int c=(piece.tile.getColumnNumber()+tile.getColumnNumber())/2;
         if(piece!=null && !piece.leveledUp && tile.piece==null)
         {
-            if(piece.tile.getRow()-tile.getRow()==-2 && Math.abs(piece.tile.getCol()-tile.getCol())==2
+            if(piece.tile.getRowNumber()-tile.getRowNumber()==-2 && Math.abs(piece.tile.getColumnNumber()-tile.getColumnNumber())==2
                     && tiles[r][c].piece!=null && tiles[r][c].piece.owner.getClass()==Player.class)
             {
                 return true;
             }
-            else if (piece.tile.getRow()-tile.getRow()==-1 && Math.abs(piece.tile.getCol()-tile.getCol())==1)
+            else if (piece.tile.getRowNumber()-tile.getRowNumber()==-1 && Math.abs(piece.tile.getColumnNumber()-tile.getColumnNumber())==1)
             {
                 return true;
             }
@@ -132,12 +124,12 @@ public class RulesEngine
         }
         else if (piece!=null && piece.leveledUp && tile.piece==null)
         {
-            if(Math.abs(piece.tile.getRow()-tile.getRow())==2 && Math.abs(piece.tile.getCol()-tile.getCol())==2
+            if(Math.abs(piece.tile.getRowNumber()-tile.getRowNumber())==2 && Math.abs(piece.tile.getColumnNumber()-tile.getColumnNumber())==2
                     && tiles[r][c].piece!=null && tiles[r][c].piece.owner.getClass()==Player.class)
             {
                 return true;
             }
-            else if (Math.abs(piece.tile.getRow()-tile.getRow())==1 && Math.abs(piece.tile.getCol()-tile.getCol())==1)
+            else if (Math.abs(piece.tile.getRowNumber()-tile.getRowNumber())==1 && Math.abs(piece.tile.getColumnNumber()-tile.getColumnNumber())==1)
             {
                 return true;
             }
@@ -152,10 +144,10 @@ public class RulesEngine
 
     public static void switchTile(Tile nTile,TextView hillaryscore, TextView trumpscore,ImageView hillaryhead,ImageView trumphead)
     {
-        if(Math.abs(Piece.selectedPiece.tile.getCol()-nTile.getCol())==2)
+        if(Math.abs(Piece.selectedPiece.tile.getColumnNumber()-nTile.getColumnNumber())==2)
         {
-            int r=(Piece.selectedPiece.tile.getRow()+nTile.getRow())/2;
-            int c=(Piece.selectedPiece.tile.getCol()+nTile.getCol())/2;
+            int r=(Piece.selectedPiece.tile.getRowNumber()+nTile.getRowNumber())/2;
+            int c=(Piece.selectedPiece.tile.getColumnNumber()+nTile.getColumnNumber())/2;
             if((player.turn && trump) || (opponent.turn && !trump))
             {
                 trumpscore.setText(String.valueOf(Integer.parseInt(trumpscore.getText().toString())+1));
@@ -176,8 +168,8 @@ public class RulesEngine
         Piece.selectedPiece.tile.piece=null;
         Piece.selectedPiece.tile=nTile;
         nTile.piece=Piece.selectedPiece;
-        Log.d("Move Piece", "Destination row: "+String.valueOf(nTile.getRow()) + " Trigger Row " + String.valueOf(tiles.length-1) + " opponent turn value "+String.valueOf(opponent.turn));
-        if( (player.turn && nTile.getRow()==0) || (opponent.turn && (nTile.getRow()==(tiles.length-1))))
+        Log.d("Move Piece", "Destination row: "+String.valueOf(nTile.getRowNumber()) + " Trigger Row " + String.valueOf(tiles.length-1) + " opponent turn value "+String.valueOf(opponent.turn));
+        if( (player.turn && nTile.getRowNumber()==0) || (opponent.turn && (nTile.getRowNumber()==(tiles.length-1))))
         {nTile.piece.leveledUp=true;}
         Piece.selectedPiece=null;
         checkWinningCondition();

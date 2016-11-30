@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 /**
  * Created by shaojun on 11/4/16.
+ * https://gist.github.com/Oshuma/3352280
  */
 
 public class CheckersPlayController extends View
@@ -28,11 +29,11 @@ public class CheckersPlayController extends View
 
     private static final int DIMENSION=6;
 
-    private final Tile[][] mTiles;
+    private final Tile[][] tiles;
 
 
-    private int x0 = 0;
-    private int y0 = 0;
+    private int xOrigin = 0;
+    private int yOrigin = 0;
     private int squareSize = 0;
     private boolean robot=RulesEngine.robot;
     private boolean trump=RulesEngine.trump;
@@ -44,10 +45,10 @@ public class CheckersPlayController extends View
         this.opponent=new Opponent();
         RulesEngine.player=this.player;
         RulesEngine.opponent=this.opponent;
-        this.mTiles = new Tile[DIMENSION][DIMENSION];
+        this.tiles = new Tile[DIMENSION][DIMENSION];
         setFocusable(true);
-        buildTiles();
-        RulesEngine.tiles=mTiles;
+        initializeTilesAndPieces();
+        RulesEngine.tiles= tiles;
     }
 
     @Override
@@ -55,26 +56,26 @@ public class CheckersPlayController extends View
 
     }
 
-    private void buildTiles() {
+    private void initializeTilesAndPieces() {
         int count = 0;
         for (int r = 0; r < DIMENSION; r++) {
             for (int c = 0; c < DIMENSION; c++) {
-                mTiles[r][c] = new Tile(r, c);
+                tiles[r][c] = new Tile(r, c);
                 if ((c+r)%2==1)
                 {
                     if (count<(DIMENSION*2+1))
                     {
-                        Piece piece = new Piece(mTiles[r][c], getOpponentColor(),count);
+                        Piece piece = new Piece(tiles[r][c], getOpponentColor(),count);
                         piece.owner=opponent;
                         opponent.pieces.add(piece);
-                        mTiles[r][c].piece = piece;
+                        tiles[r][c].piece = piece;
                     }
                     if (count>DIMENSION*DIMENSION-DIMENSION*2-1)
                     {
-                        Piece piece = new Piece(mTiles[r][c], getPlayerColor(),count);
+                        Piece piece = new Piece(tiles[r][c], getPlayerColor(),count);
                         piece.owner=player;
                         player.pieces.add(piece);
-                        mTiles[r][c].piece = piece;
+                        tiles[r][c].piece = piece;
                     }
                 }
                 count++;
@@ -106,17 +107,19 @@ public class CheckersPlayController extends View
         }
     }
 
-    private int getXCoord(final int x) {
-        return x0 + squareSize * x;
+    private int getXFromColumnNumber(final int c)
+    {
+        return xOrigin + squareSize * c;
     }
 
-    private int getYCoord(final int y) {
-        return y0 + squareSize * y;
+    private int getYFromRowNumber(final int r)
+    {
+        return yOrigin + squareSize * r;
     }
 
-    private void computeOrigins(final int width, final int height) {
-        this.x0 = (width  - squareSize * DIMENSION) / 2;
-        this.y0 = (height - squareSize * DIMENSION) / 2;
+    private void setOrigins(final int width, final int height) {
+        this.xOrigin = (width  - squareSize * DIMENSION) / 2;
+        this.yOrigin = (height - squareSize * DIMENSION) / 2;
     }
 
     @Override
@@ -125,27 +128,20 @@ public class CheckersPlayController extends View
         final int height = getHeight();
         this.squareSize = Math.min(getWidth()/DIMENSION, getHeight()/DIMENSION);
 
-        computeOrigins(width, height);
+        setOrigins(width, height);
 
         for (int r = 0; r < DIMENSION; r++) {
             for (int c = 0; c < DIMENSION; c++) {
-                final int xCoord = getXCoord(c);
-                final int yCoord = getYCoord(r);
+                final int xCoord = getXFromColumnNumber(c);
+                final int yCoord = getYFromRowNumber(r);
+                final Rect rect = new Rect(xCoord, yCoord, (xCoord + squareSize), (yCoord + squareSize));
+                tiles[r][c].setRect(rect);
+                tiles[r][c].draw(canvas);
 
-                final Rect tileRect = new Rect(
-                        xCoord,               // left
-                        yCoord,               // top
-                        xCoord + squareSize,  // right
-                        yCoord + squareSize   // bottom
-                );
-
-                mTiles[r][c].setTileRect(tileRect);
-                mTiles[r][c].draw(canvas);
-
-                if(mTiles[r][c].piece != null)
+                if(tiles[r][c].piece != null)
                 {
-                    mTiles[r][c].piece.setDrawingParam(squareSize/2,xCoord+squareSize/2,yCoord+squareSize/2);
-                    mTiles[r][c].piece.draw(canvas);
+                    tiles[r][c].piece.setDrawingParam(squareSize/2,xCoord+squareSize/2,yCoord+squareSize/2);
+                    tiles[r][c].piece.draw(canvas);
                 }
                 Piece.drawSelected(canvas);
             }
@@ -161,7 +157,7 @@ public class CheckersPlayController extends View
         outerloop:
         for (int r = 0; r < DIMENSION; r++) {
             for (int c = 0; c < DIMENSION; c++) {
-                tile = mTiles[r][c];
+                tile = tiles[r][c];
                 if (tile.isTouched(x, y))
                 {
                     tile.handleTouch();
@@ -187,38 +183,6 @@ public class CheckersPlayController extends View
             invalidate();
         }
     }
-//    @Override
-//    public boolean onTouchEvent(final MotionEvent event) {
-//        final int x = (int) event.getX();
-//        final int y = (int) event.getY();
-//
-//        Tile tile;
-//        outerloop:
-//        for (int r = 0; r < DIMENSION; r++) {
-//            for (int c = 0; c < DIMENSION; c++) {
-//                tile = mTiles[r][c];
-//                if (tile.isTouched(x, y))
-//                {
-//                    tile.handleTouch();
-//                    if(RulesEngine.pieceSelectable(tile.piece))
-//                    {
-//                        RulesEngine.selectPiece(tile.piece);
-//                        RulesEngine.setLegality();
-//                    }
-//                    else if(RulesEngine.pieceDeployable(tile))
-//                    {
-//                        RulesEngine.switchTile(tile,hillaryscore,trumpscore);
-//                        RulesEngine.switchTurn();
-//                        RulesEngine.clearLegality();
-//                    }
-//                    invalidate();
-//                    break outerloop;
-//                }
-//            }
-//        }
-//
-//        return true;
-//    }
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)

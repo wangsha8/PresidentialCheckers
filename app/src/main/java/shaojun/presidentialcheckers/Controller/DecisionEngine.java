@@ -71,10 +71,10 @@ public class DecisionEngine extends RulesEngine
 
     private static void switchTile(Piece piece, Tile nTile, TextView hillaryscore, TextView trumpscore, ImageView hillaryhead, ImageView trumphead)
     {
-        if(Math.abs(piece.tile.getCol()-nTile.getCol())==2)
+        if(Math.abs(piece.tile.getColumnNumber()-nTile.getColumnNumber())==2)
         {
-            int r=(piece.tile.getRow()+nTile.getRow())/2;
-            int c=(piece.tile.getCol()+nTile.getCol())/2;
+            int r=(piece.tile.getRowNumber()+nTile.getRowNumber())/2;
+            int c=(piece.tile.getColumnNumber()+nTile.getColumnNumber())/2;
             if(!trump)
             {
                 trumpscore.setText(String.valueOf(Integer.parseInt(trumpscore.getText().toString())+1));
@@ -95,17 +95,17 @@ public class DecisionEngine extends RulesEngine
         piece.tile.piece=null;
         piece.tile=nTile;
         nTile.piece=piece;
-        Log.d("Move Piece", "Destination row: "+String.valueOf(nTile.getRow()) + " Trigger Row " + String.valueOf(tiles.length-1) + " opponent turn value "+String.valueOf(opponent.turn));
-        if( nTile.getRow()==(tiles.length-1))
+        Log.d("Move Piece", "Destination row: "+String.valueOf(nTile.getRowNumber()) + " Trigger Row " + String.valueOf(tiles.length-1) + " opponent turn value "+String.valueOf(opponent.turn));
+        if( nTile.getRowNumber()==(tiles.length-1))
         {nTile.piece.leveledUp=true;}
         checkWinningCondition();
     }
 
     private static boolean isScoreMove(Piece piece, Tile tile) {
-        int r = (piece.tile.getRow() + tile.getRow()) / 2;
-        int c = (piece.tile.getCol() + tile.getCol()) / 2;
+        int r = (piece.tile.getRowNumber() + tile.getRowNumber()) / 2;
+        int c = (piece.tile.getColumnNumber() + tile.getColumnNumber()) / 2;
         if (piece != null && !piece.leveledUp && tile.piece == null) {
-            if (piece.tile.getRow() - tile.getRow() == -2 && Math.abs(piece.tile.getCol() - tile.getCol()) == 2
+            if (piece.tile.getRowNumber() - tile.getRowNumber() == -2 && Math.abs(piece.tile.getColumnNumber() - tile.getColumnNumber()) == 2
                     && tiles[r][c].piece != null && tiles[r][c].piece.owner.getClass() == Player.class) {
                 return true;
             }
@@ -115,7 +115,7 @@ public class DecisionEngine extends RulesEngine
             }
         }
         else if (piece != null && piece.leveledUp && tile.piece == null) {
-            if (Math.abs(piece.tile.getRow() - tile.getRow()) == 2 && Math.abs(piece.tile.getCol() - tile.getCol()) == 2
+            if (Math.abs(piece.tile.getRowNumber() - tile.getRowNumber()) == 2 && Math.abs(piece.tile.getColumnNumber() - tile.getColumnNumber()) == 2
                     && tiles[r][c].piece != null && tiles[r][c].piece.owner.getClass() == Player.class) {
                 return true;
             }
@@ -130,13 +130,13 @@ public class DecisionEngine extends RulesEngine
 
     private static boolean isLegalMove(Piece piece, Tile tile) {
         if (piece != null && !piece.leveledUp && tile.piece == null) {
-            if (piece.tile.getRow() - tile.getRow() == -1 && Math.abs(piece.tile.getCol() - tile.getCol()) == 1) {
+            if (piece.tile.getRowNumber() - tile.getRowNumber() == -1 && Math.abs(piece.tile.getColumnNumber() - tile.getColumnNumber()) == 1) {
                 return true;
             } else {
                 return false;
             }
         } else if (piece != null && piece.leveledUp && tile.piece == null) {
-            if (Math.abs(piece.tile.getRow() - tile.getRow()) == 1 && Math.abs(piece.tile.getCol() - tile.getCol()) == 1) {
+            if (Math.abs(piece.tile.getRowNumber() - tile.getRowNumber()) == 1 && Math.abs(piece.tile.getColumnNumber() - tile.getColumnNumber()) == 1) {
                 return true;
             } else {
                 return false;
